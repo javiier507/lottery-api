@@ -25,8 +25,6 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  console.log(parsed.data)
-
   return getLotteries(parsed.data)
     .then(async (data) => {
       return Response.json({ data });
