@@ -1,6 +1,7 @@
 import { chromium } from "playwright";
 
 import { Lottery } from "@/types/lottery";
+import { addLotteries } from "@/db/repositories/lottery.repository";
 
 export async function getLotteryData(): Promise<Lottery[]> {
   let results: Lottery[] = [];
@@ -44,4 +45,15 @@ export async function getLotteryData(): Promise<Lottery[]> {
   await browser.close();
 
   return results;
+}
+
+export async function addLotteriesData(lotteries: Lottery[]) {
+  await addLotteries(lotteries)
+    .then(() => {
+      console.log("Data successfully added");
+    })
+    .catch((e) => {
+      console.error("Error: Add Lotteries");
+      console.error(e);
+    });
 }
