@@ -4,7 +4,7 @@ import { Lottery } from "@/types/lottery";
 import { addLotteries } from "@/db/repositories/lottery.repository";
 
 export async function getLotteryData(): Promise<Lottery[]> {
-  let results: Lottery[] = [];
+  const results: Lottery[] = [];
 
   const browser = await chromium.launch();
   const context = await browser.newContext();
