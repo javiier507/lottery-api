@@ -5,7 +5,7 @@ export const LotteryTable = sqliteTable("lottery", {
   draw: int().notNull().unique(),
   dateTitle: text().notNull(),
   date: text().notNull(),
-  firstPrize: int().notNull(),
-  secondPrize: int().notNull(),
-  thirdPrize: int().notNull(),
+  firstPrize: text().notNull(),
+  secondPrize: text().notNull(),
+  thirdPrize: text().notNull(),
 });

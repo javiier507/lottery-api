@@ -37,9 +37,9 @@ export async function getLotteryData(): Promise<Lottery[]> {
         draw: parseInt(draw),
         dateTitle: dateStr,
         date: date.toISOString(),
-        firstPrize: parseInt(first),
-        secondPrize: parseInt(second),
-        thirdPrize: parseInt(third),
+        firstPrize: first,
+        secondPrize: second,
+        thirdPrize: third,
       });
     }
   }
