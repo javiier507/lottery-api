@@ -1,6 +1,10 @@
 import { chromium } from "playwright";
 
-export async function getLotteryData() {
+import { Lottery } from "@/types/lottery";
+
+export async function getLotteryData(): Promise<Lottery[]> {
+  let results: Lottery[] = [];
+
   const browser = await chromium.launch();
   const context = await browser.newContext();
   const page = await context.newPage();
@@ -24,8 +28,20 @@ export async function getLotteryData() {
     const third = await firstContent[2].textContent();
 
     console.table([draw, date, first, second, third]);
+
+    if (draw && date && first && second && third) {
+      results.push({
+        draw: parseInt(draw),
+        dateString: date,
+        firstPrize: parseInt(first),
+        secondPrize: parseInt(second),
+        thirdPrize: parseInt(third),
+      });
+    }
   }
 
   await context.close();
   await browser.close();
+
+  return results;
 }
