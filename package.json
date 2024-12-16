@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "npx playwright test",
+    "test:e2e": "npx playwright test",
     "drizzle:push": "drizzle-kit push"
   },
   "dependencies": {
