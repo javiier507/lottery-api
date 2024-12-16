@@ -35,3 +35,17 @@ export function getDate(dateString: string): Date {
     current.getSeconds()
   );
 }
+
+export function calculateSecondsBetweenDates(date1: Date, date2: Date) {
+  // Ensure date1 is earlier than date2
+  const earlierDate = date1 < date2 ? date1 : date2;
+  const laterDate = date1 > date2 ? date1 : date2;
+
+  // Calculate difference in milliseconds
+  const diffMilliseconds = laterDate.getTime() - earlierDate.getTime();
+
+  // Convert milliseconds to seconds
+  const diffSeconds = diffMilliseconds / 1000;
+
+  return diffSeconds;
+}
