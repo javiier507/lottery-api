@@ -2,6 +2,7 @@ import { type NextRequest } from "next/server";
 import { z } from "zod";
 
 import { getLotteries } from "@/db/repositories/lottery.repository";
+import { getMaxAge } from '@/utils/cache';
 
 const paginationSchema = z.object({
   limit: z.coerce
@@ -28,10 +29,10 @@ export async function GET(request: NextRequest) {
 
   return getLotteries(parsed.data)
     .then(async (data) => {
+      const seconds = getMaxAge(new Date()).seconds;
       return Response.json({ data }, {
         headers: {
-          //'Access-Control-Allow-Origin': '*',
-          'Cache-Control': 'public, max-age=30'
+          'Cache-Control': `public, max-age=${seconds}`
         }
       });
     })
