@@ -7,14 +7,14 @@ type MaxAge = {
 }
 
 export function getMaxAge(currentDate: Date): MaxAge {
-    currentDate.setUTCSeconds(0)
+    currentDate.setUTCMilliseconds(0)
     const hour = currentDate.getUTCHours();
     const minutes = currentDate.getUTCMinutes();
 
     const limitDate = new Date(currentDate.toString())
     limitDate.setUTCHours(20)
     limitDate.setUTCMinutes(30)
-    limitDate.setUTCSeconds(0)
+    limitDate.setUTCMilliseconds(0)
 
     if (hour === 20 && minutes > 30) {
         limitDate.setUTCMinutes(minutes + 2)
@@ -28,6 +28,6 @@ export function getMaxAge(currentDate: Date): MaxAge {
     return {
         currentDate,
         limitDate,
-        seconds: Math.trunc(seconds) + 1
+        seconds: Math.trunc(seconds)
     }
 }

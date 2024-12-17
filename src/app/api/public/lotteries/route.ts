@@ -28,7 +28,12 @@ export async function GET(request: NextRequest) {
 
   return getLotteries(parsed.data)
     .then(async (data) => {
-      return Response.json({ data });
+      return Response.json({ data }, {
+        headers: {
+          //'Access-Control-Allow-Origin': '*',
+          'Cache-Control': 'public, max-age=30'
+        }
+      });
     })
     .catch((e) => {
       console.error("Error: Get Lotteries");
