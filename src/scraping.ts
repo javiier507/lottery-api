@@ -34,7 +34,7 @@ export async function getLotteryData(): Promise<Lottery[]> {
 
     if (draw && dateStr && date && first && second && third) {
       results.push({
-        draw: parseInt(draw),
+        draw: draw,
         dateTitle: dateStr,
         date: date.toISOString(),
         firstPrize: first,

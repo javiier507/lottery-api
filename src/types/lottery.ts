@@ -1,5 +1,5 @@
 export type Lottery = {
-  draw: number;
+  draw: string;
   dateTitle: string;
   date: string;
   firstPrize: string;
