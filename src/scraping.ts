@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 import { Lottery } from "@/types/lottery";
-import { addLotteries } from "@/db/repositories/lottery.repository";
+import { addLotteries, getLotteryDrawsByDraws } from "@/db/repositories/lottery.repository";
 import { getDate } from "@/utils/date";
 
 export async function getLotteryData(): Promise<Lottery[]> {
@@ -51,7 +51,12 @@ export async function getLotteryData(): Promise<Lottery[]> {
 }
 
 export async function addLotteriesData(lotteries: Lottery[]) {
-  await addLotteries(lotteries)
+  const existingDraws = await getLotteryDrawsByDraws(lotteries.map((x) => x.draw));
+  const newDraws = lotteries.filter((x) => !existingDraws.find((y) => y.draw === x.draw));
+
+  if (newDraws.length === 0) return;
+
+  await addLotteries(newDraws)
     .then(() => {
       console.log("Data successfully added");
     })

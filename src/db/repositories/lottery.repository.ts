@@ -1,4 +1,4 @@
-import { desc } from "drizzle-orm";
+import { desc, inArray } from "drizzle-orm";
 
 import { db } from "@/db";
 import { LotteryTable } from "@/db/schema";
@@ -25,4 +25,11 @@ export async function getLotteries(
 
 export async function addLotteries(lotteries: Lottery[]) {
   return db.insert(LotteryTable).values(lotteries).onConflictDoNothing();
+}
+
+export async function getLotteryDrawsByDraws(draws: string[]): Promise<{draw: string}[]> {
+  return db
+    .select({draw: LotteryTable.draw})
+    .from(LotteryTable)
+    .where(inArray(LotteryTable.draw, draws));
 }
