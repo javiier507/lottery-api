@@ -1,6 +1,6 @@
 {
-  "id": "43ad5c1c-e90e-47df-81c7-237b4e9289a9",
-  "prevId": "1b7394ef-c26b-4b1b-a7f5-2670de9efb58",
+  "id": "a887da17-83a7-472d-97c0-e9ee305425a8",
+  "prevId": "2cb7e801-50ec-42a8-a6a9-045e673c11d7",
   "version": "6",
   "dialect": "sqlite",
   "tables": {
@@ -40,7 +40,7 @@
         },
         "draw": {
           "name": "draw",
-          "type": "integer",
+          "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false

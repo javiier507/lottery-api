@@ -5,22 +5,15 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1735613330452,
-      "tag": "0000_far_firedrake",
+      "when": 1735659617676,
+      "tag": "0000_famous_old_lace",
       "breakpoints": true
     },
     {
       "idx": 1,
       "version": "6",
-      "when": 1735614726334,
+      "when": 1735659666283,
       "tag": "0001_seed_lotteries",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1735656297597,
-      "tag": "0002_brief_carmella_unuscione",
       "breakpoints": true
     }
   ]

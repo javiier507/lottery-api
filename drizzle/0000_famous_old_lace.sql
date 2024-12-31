@@ -5,7 +5,7 @@ CREATE TABLE `device` (
 --> statement-breakpoint
 CREATE TABLE `lottery` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
-	`draw` integer NOT NULL,
+	`draw` text NOT NULL,
 	`dateTitle` text NOT NULL,
 	`date` text NOT NULL,
 	`firstPrize` text NOT NULL,
