@@ -9,3 +9,8 @@ export const LotteryTable = sqliteTable("lottery", {
   secondPrize: text().notNull(),
   thirdPrize: text().notNull(),
 });
+
+export const DeviceTable = sqliteTable("device", {
+  token: text({ length: 100 }).primaryKey(),
+  createdAt: text({ length: 25 }).notNull(),
+});
