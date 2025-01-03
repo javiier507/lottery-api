@@ -22,7 +22,7 @@ export function getDate(dateString: string): Date {
   if (!dayStr || !monthStr || !yearStr) throw new Error("Get Portions Date");
 
   const month = MONTHS_MAP.get(monthStr);
-  if (!month) throw new Error("Get Month");
+  if (typeof month !== 'number') throw new Error("Get Month");
 
   const current = new Date();
 
