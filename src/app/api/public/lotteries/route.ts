@@ -7,7 +7,7 @@ import { getMaxAge } from '@/utils/cache';
 const paginationSchema = z.object({
   limit: z.coerce
     .number()
-    .transform((x) => (x < 50 ? 50 : x)),
+    .transform((x) => (x < 25 ? 25 : x)),
   offset: z.coerce.number().default(0),
 });
 
