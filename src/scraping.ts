@@ -11,7 +11,7 @@ export async function getLotteryData(): Promise<Lottery[]> {
   const context = await browser.newContext();
   const page = await context.newPage();
 
-  await page.goto("https://www.lnb.gob.pa/");
+  await page.goto("http://www.lnb.gob.pa/");
 
   for (const container of await page.locator("div.containerTablero").all()) {
     const draw = await container.locator(".sorteo-number > div").textContent();
