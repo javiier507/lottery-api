@@ -3,7 +3,7 @@ import { getDevicesToken } from '@/db/repositories/device.repository'
 const NOTIFICATION_TOPIC = {
     title: 'Loteria',
     body: 'Resultado de loteria disponible',
-}
+} as const;
 
 export async function sendNotification() {
     const deviceTokens = await getDevicesToken()

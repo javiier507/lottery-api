@@ -30,7 +30,12 @@ export async function getLotteryData(): Promise<Lottery[]> {
     const second = await firstContent[1].textContent();
     const third = await firstContent[2].textContent();
 
-    console.table([draw, dateStr, date?.toISOString(), first, second, third]);
+    const details = await container.locator(".primer-premio-details > .value").all()
+    const letters = await details[0].textContent();
+    const serie = await details[1].textContent();
+    const folio = await details[2].textContent();
+
+    console.table([draw, dateStr, date?.toISOString(), first, second, third, letters, serie, folio]);
 
     if (draw && dateStr && date && first && second && third) {
       results.push({
@@ -40,6 +45,9 @@ export async function getLotteryData(): Promise<Lottery[]> {
         firstPrize: first,
         secondPrize: second,
         thirdPrize: third,
+        letters,
+        serie,
+        folio
       });
     }
   }

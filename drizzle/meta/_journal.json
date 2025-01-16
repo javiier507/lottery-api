@@ -15,6 +15,13 @@
       "when": 1735659666283,
       "tag": "0001_seed_lotteries",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1736997184697,
+      "tag": "0002_short_celestials",
+      "breakpoints": true
     }
   ]
 }

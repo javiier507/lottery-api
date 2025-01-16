@@ -8,6 +8,9 @@ export const LotteryTable = sqliteTable("lottery", {
   firstPrize: text().notNull(),
   secondPrize: text().notNull(),
   thirdPrize: text().notNull(),
+  letters: text(),
+  serie: text(),
+  folio: text(),
 });
 
 export const DeviceTable = sqliteTable("device", {
