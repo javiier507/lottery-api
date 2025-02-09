@@ -4,6 +4,8 @@ import { z } from "zod";
 import { getLotteries } from "@/db/repositories/lottery.repository";
 import { getMaxAge } from '@/utils/cache';
 
+export const dynamic = 'force-dynamic';
+
 const paginationSchema = z.object({
   limit: z.coerce
     .number()
