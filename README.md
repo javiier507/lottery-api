@@ -5,12 +5,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 Setting up the environment variables:
 
 ```bash
+# Database
 TURSO_DATABASE_URL=
 TURSO_AUTH_TOKEN=
 
+# Auth Provider
 NEXT_PUBLIC_STACK_PROJECT_ID=
 NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=
 STACK_SECRET_SERVER_KEY=
+
+# API
+NEXT_PUBLIC_API_KEY=
 ```
 
 First, run the development server:
