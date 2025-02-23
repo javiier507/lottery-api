@@ -34,7 +34,7 @@ export function LotteryForm() {
 	}
 
 	return (
-		<div className="mx-auto max-w-2xl p-4 md:p-6">
+		<>
 			<div className="mb-6">
 				<h2 className="text-2xl font-bold tracking-tight">Lottery Form</h2>
 				<p className="text-gray-500">Enter lottery draw information below.</p>
@@ -209,6 +209,6 @@ export function LotteryForm() {
 					{isSubmitting ? "Submitting..." : "Submit"}
 				</button>
 			</form>
-		</div>
+		</>
 	);
 }
