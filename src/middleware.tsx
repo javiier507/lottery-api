@@ -2,6 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { stackServerApp } from "./stack";
 import { NEXT_PUBLIC_API_KEY } from "./utils/environment";
+
 export async function middleware(request: NextRequest) {
 	if (request.nextUrl.pathname.startsWith("/api/public")) {
 		const apiKey = request.headers.get("X-API-KEY");
