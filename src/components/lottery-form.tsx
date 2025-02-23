@@ -18,7 +18,7 @@ const lotterySchema = z.object({
 
 type LotteryFormValues = z.infer<typeof lotterySchema>;
 
-export function LotteryForm() {
+export function LotteryForm(props: { onSubmit: (data: LotteryFormValues) => Promise<void> }) {
 	const {
 		register,
 		handleSubmit,
@@ -28,9 +28,7 @@ export function LotteryForm() {
 	});
 
 	async function onSubmit(data: LotteryFormValues) {
-		// Simulate API call
-		await new Promise((resolve) => setTimeout(resolve, 1000));
-		console.log(data);
+		await props.onSubmit(data);
 	}
 
 	return (
