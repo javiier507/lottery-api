@@ -2,8 +2,8 @@ import { desc, inArray } from "drizzle-orm";
 
 import { db } from "@/db";
 import { LotteryTable } from "@/db/schema";
-import { Lottery } from "@/types/lottery";
-import { Pagination, PaginationParams } from "@/types/pagination";
+import type { Lottery } from "@/types/lottery";
+import type { Pagination, PaginationParams } from "@/types/pagination";
 
 export async function getLotteries(
 	params: PaginationParams = { limit: 10, offset: 0 },
