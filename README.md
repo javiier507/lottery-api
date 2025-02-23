@@ -2,6 +2,17 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Setting up the environment variables:
+
+```bash
+TURSO_DATABASE_URL=
+TURSO_AUTH_TOKEN=
+
+NEXT_PUBLIC_STACK_PROJECT_ID=
+NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=
+STACK_SECRET_SERVER_KEY=
+```
+
 First, run the development server:
 
 ```bash
