@@ -1,10 +1,10 @@
-import { Container } from '@/components/container';
-import { NewLotteryPageClient } from './page.client';
+import { Container } from "@/components/container";
+import { NewLotteryPageClient } from "./page.client";
 
 export default function NewLotteryPage() {
-  return (
-    <Container>
-      <NewLotteryPageClient />
-    </Container>
-  );
+	return (
+		<Container>
+			<NewLotteryPageClient />
+		</Container>
+	);
 }
