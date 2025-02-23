@@ -18,6 +18,12 @@ export default async function ManagementPage() {
                 Create New Lottery
             </Link>
             <LotteryTableWrapper lotteries={lotteries.records} />
+            <Link 
+                href="/handler/sign-out"
+                className="mt-4 inline-block bg-black text-white px-4 py-2 rounded hover:bg-gray-800 transition-colors"
+            >
+                Sign Out
+            </Link>
         </Container>
     );
 }
