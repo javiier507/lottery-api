@@ -2,8 +2,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-Setting up the environment variables:
+First, set up the environment variables:
 
+`.env.local`
 ```bash
 # Database
 TURSO_DATABASE_URL=
@@ -15,10 +16,10 @@ NEXT_PUBLIC_STACK_PUBLISHABLE_CLIENT_KEY=
 STACK_SECRET_SERVER_KEY=
 
 # API
-NEXT_PUBLIC_API_KEY=
+API_KEY=
 ```
 
-First, run the development server:
+Second, run the development server:
 
 ```bash
 npm run dev

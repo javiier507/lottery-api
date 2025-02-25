@@ -1,12 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 
 import { stackServerApp } from "./stack";
-import { NEXT_PUBLIC_API_KEY } from "./utils/environment";
+import { API_KEY } from "./utils/environment";
 
 export async function middleware(request: NextRequest) {
 	if (request.nextUrl.pathname.startsWith("/api/public")) {
 		const apiKey = request.headers.get("X-API-KEY");
-		if (apiKey !== NEXT_PUBLIC_API_KEY) {
+		if (apiKey !== API_KEY) {
 			return NextResponse.json({ error: "Invalid API key" }, { status: 401 });
 		}
 		return NextResponse.next();
