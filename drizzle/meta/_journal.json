@@ -1,27 +1,34 @@
 {
-  "version": "7",
-  "dialect": "sqlite",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "6",
-      "when": 1735659617676,
-      "tag": "0000_famous_old_lace",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1735659666283,
-      "tag": "0001_seed_lotteries",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1736997184697,
-      "tag": "0002_short_celestials",
-      "breakpoints": true
-    }
-  ]
+	"version": "7",
+	"dialect": "sqlite",
+	"entries": [
+		{
+			"idx": 0,
+			"version": "6",
+			"when": 1735659617676,
+			"tag": "0000_famous_old_lace",
+			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "6",
+			"when": 1735659666283,
+			"tag": "0001_seed_lotteries",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "6",
+			"when": 1736997184697,
+			"tag": "0002_short_celestials",
+			"breakpoints": true
+		},
+		{
+			"idx": 3,
+			"version": "6",
+			"when": 1740714048996,
+			"tag": "0003_vengeful_puma",
+			"breakpoints": true
+		}
+	]
 }

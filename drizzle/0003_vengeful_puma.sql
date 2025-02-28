@@ -1,0 +1,1 @@
+ALTER TABLE `device` ADD `metadata` text;

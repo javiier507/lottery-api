@@ -4,7 +4,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 First, set up the environment variables:
 
-`.env.local`
+`.env`
 ```bash
 # Database
 TURSO_DATABASE_URL=

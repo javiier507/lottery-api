@@ -15,5 +15,6 @@ export const LotteryTable = sqliteTable("lottery", {
 
 export const DeviceTable = sqliteTable("device", {
 	token: text({ length: 100 }).primaryKey(),
+	metadata: text(),
 	createdAt: text({ length: 25 }).notNull(),
 });

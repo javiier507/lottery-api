@@ -4,11 +4,13 @@ import { addDevice } from "@/db/repositories/device.repository";
 
 const deviceSchema = z.object({
 	token: z.string(),
+	metadata: z.string().optional(),
 });
 
 export async function POST(request: Request) {
 	const json = await request.json();
 	const parsed = deviceSchema.safeParse(json);
+
 	if (!parsed.success) {
 		return Response.json(
 			{ message: "The parameters do not comply with the correct format" },
@@ -16,7 +18,7 @@ export async function POST(request: Request) {
 		);
 	}
 
-	return addDevice(parsed.data.token)
+	return addDevice(parsed.data.token, parsed.data.metadata)
 		.then(() => {
 			return Response.json({ message: "Device added" });
 		})
