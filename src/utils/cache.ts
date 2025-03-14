@@ -18,7 +18,10 @@ export function getMaxAge(currentDate: Date): MaxAge {
 
 	if (hour === 20 && minutes > 30) {
 		limitDate.setUTCMinutes(minutes + 2);
-	} else if (hour > 20) {
+	} else if (hour === 21) {
+		limitDate.setUTCHours(21);
+		limitDate.setUTCMinutes(minutes + 2);
+	} else if (hour > 21) {
 		limitDate.setUTCDate(limitDate.getUTCDate() + 1);
 	}
 
