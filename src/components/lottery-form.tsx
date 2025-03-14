@@ -209,6 +209,32 @@ export function LotteryForm(props: {
 					{isSubmitting ? "Submitting..." : "Submit"}
 				</button>
 			</form>
+
+			<div className="mt-8 border-t pt-6">
+				<h3 className="text-lg font-semibold mb-3">Resources</h3>
+				<ul className="space-y-2 text-sm text-blue-600">
+					<li>
+						<a
+							href="https://www.utctime.net/"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline"
+						>
+							UTC Time Converter
+						</a>
+					</li>
+					<li>
+						<a
+							href="https://www.telemetro.com/entretenimiento"
+							target="_blank"
+							rel="noopener noreferrer"
+							className="hover:underline"
+						>
+							Telemetro Entertainment
+						</a>
+					</li>
+				</ul>
+			</div>
 		</>
 	);
 }
