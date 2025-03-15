@@ -2,34 +2,36 @@ import { desc, inArray } from "drizzle-orm";
 
 import { db } from "@/db";
 import { LotteryTable } from "@/db/schema";
-import { Lottery } from "@/types/lottery";
-import { Pagination, PaginationParams } from "@/types/pagination";
+import type { Lottery } from "@/types/lottery";
+import type { Pagination, PaginationParams } from "@/types/pagination";
 
 export async function getLotteries(
-  params: PaginationParams = { limit: 10, offset: 0 }
+	params: PaginationParams = { limit: 10, offset: 0 },
 ): Promise<Pagination<Lottery[]>> {
-  const records = await db
-    .select()
-    .from(LotteryTable)
-    .orderBy(desc(LotteryTable.id))
-    .limit(params.limit)
-    .offset(params.offset);
+	const records = await db
+		.select()
+		.from(LotteryTable)
+		.orderBy(desc(LotteryTable.id))
+		.limit(params.limit)
+		.offset(params.offset);
 
-  const totalRecords = await db.$count(LotteryTable);
+	const totalRecords = await db.$count(LotteryTable);
 
-  return {
-    records,
-    totalRecords,
-  };
+	return {
+		records,
+		totalRecords,
+	};
 }
 
 export async function addLotteries(lotteries: Lottery[]) {
-  return db.insert(LotteryTable).values(lotteries).onConflictDoNothing();
+	return db.insert(LotteryTable).values(lotteries).onConflictDoNothing();
 }
 
-export async function getLotteryDrawsByDraws(draws: string[]): Promise<{draw: string}[]> {
-  return db
-    .select({draw: LotteryTable.draw})
-    .from(LotteryTable)
-    .where(inArray(LotteryTable.draw, draws));
+export async function getLotteryDrawsByDraws(
+	draws: string[],
+): Promise<{ draw: string }[]> {
+	return db
+		.select({ draw: LotteryTable.draw })
+		.from(LotteryTable)
+		.where(inArray(LotteryTable.draw, draws));
 }
