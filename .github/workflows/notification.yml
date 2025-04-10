@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   
 jobs:
-  test:
+  notification:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
