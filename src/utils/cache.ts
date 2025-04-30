@@ -1,8 +1,12 @@
-import { calculateSecondsBetweenDates } from "./date";
+import {
+	calculateSecondsBetweenDates,
+	addMinutes,
+	calculateMinutesBetweenDates,
+} from "./date";
 
 type MaxAge = {
 	currentDate: Date;
-	limitDate: Date;
+	expirationDate: Date;
 	seconds: number;
 };
 
@@ -11,25 +15,27 @@ export function getMaxAge(currentDate: Date): MaxAge {
 	const hour = currentDate.getUTCHours();
 	const minutes = currentDate.getUTCMinutes();
 
+	let expirationDate = new Date(currentDate.toString());
+
 	const limitDate = new Date(currentDate.toString());
 	limitDate.setUTCHours(20);
 	limitDate.setUTCMinutes(30);
 	limitDate.setUTCMilliseconds(0);
 
-	if (hour === 20 && minutes > 30) {
-		limitDate.setUTCMinutes(minutes + 2);
-	} else if (hour === 21) {
-		limitDate.setUTCHours(21);
-		limitDate.setUTCMinutes(minutes + 2);
-	} else if (hour > 21) {
-		limitDate.setUTCDate(limitDate.getUTCDate() + 1);
+	if ((hour === 20 && minutes > 30) || (hour === 21 && minutes < 30)) {
+		expirationDate = addMinutes(expirationDate, 2);
+	} else if (hour >= 21) {
+		expirationDate = addMinutes(expirationDate, 60);
+	} else {
+		const diffMinutes = calculateMinutesBetweenDates(expirationDate, limitDate);
+		expirationDate = addMinutes(expirationDate, diffMinutes);
 	}
 
-	const seconds = calculateSecondsBetweenDates(currentDate, limitDate);
+	const seconds = calculateSecondsBetweenDates(currentDate, expirationDate);
 
 	return {
 		currentDate,
-		limitDate,
+		expirationDate,
 		seconds: Math.trunc(seconds),
 	};
 }

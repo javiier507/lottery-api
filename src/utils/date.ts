@@ -27,9 +27,9 @@ export function getDate(dateString: string): Date {
 	const current = new Date();
 
 	return new Date(
-		parseInt(yearStr),
+		Number.parseInt(yearStr),
 		month,
-		parseInt(dayStr),
+		Number.parseInt(dayStr),
 		current.getHours(),
 		current.getMinutes(),
 		current.getSeconds(),
@@ -48,4 +48,15 @@ export function calculateSecondsBetweenDates(date1: Date, date2: Date) {
 	const diffSeconds = diffMilliseconds / 1000;
 
 	return diffSeconds;
+}
+
+export function addMinutes(date: Date, minutes: number): Date {
+	const newDate = new Date(date);
+	newDate.setUTCMinutes(newDate.getUTCMinutes() + minutes);
+	return newDate;
+}
+
+export function calculateMinutesBetweenDates(date1: Date, date2: Date): number {
+	const diff = date2.getTime() - date1.getTime();
+	return Math.floor(diff / (1000 * 60));
 }
