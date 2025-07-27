@@ -7,7 +7,11 @@ import { getMaxAge } from "@/utils/cache";
 export const dynamic = "force-dynamic";
 
 const paginationSchema = z.object({
-	limit: z.coerce.number().transform((x) => (x < 25 ? 25 : x)),
+	limit: z.coerce.number().transform((val) => {
+		if (val < 25) return 25;
+		if (val > 1000) return 1000;
+		return val;
+	}),
 	offset: z.coerce.number().default(0),
 });
 
