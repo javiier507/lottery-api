@@ -24,3 +24,10 @@ export async function sendNotification() {
 		.then((response) => console.log(response))
 		.catch((error) => console.error(error));
 }
+
+if (require.main === module) {
+	console.log("🚀 Starting notification process...");
+	sendNotification()
+		.then(() => console.log("✅ Notifications sent successfully"))
+		.catch((error) => console.error("❌ Failed to send notifications:", error));
+}
