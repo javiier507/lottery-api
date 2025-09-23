@@ -49,6 +49,13 @@ export async function hasRecentLotteryRecords(): Promise<boolean> {
 		const timeDifferenceMs = currentTime.getTime() - recordTime.getTime();
 		const twelveHoursMs = 12 * 60 * 60 * 1000;
 
+		console.log({
+			currentTime,
+			recordTime,
+			timeDifferenceMs,
+			result: timeDifferenceMs <= twelveHoursMs,
+		});
+
 		return timeDifferenceMs <= twelveHoursMs;
 	} catch (error) {
 		console.error("Error checking recent lottery records:", error);
