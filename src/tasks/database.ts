@@ -33,8 +33,8 @@ export async function addLotteriesData(lotteries: Lottery[]): Promise<boolean> {
 }
 
 /**
- * Check if there are recent lottery records (within last 12 hours)
- * @returns True if the most recent record is within 12 hours, false otherwise
+ * Check if there are recent lottery records (from current date)
+ * @returns True if the most recent record is from the current date, false otherwise
  */
 export async function hasRecentLotteryRecords(): Promise<boolean> {
 	try {
@@ -43,20 +43,29 @@ export async function hasRecentLotteryRecords(): Promise<boolean> {
 		if (lotteries.records.length === 0) return false;
 
 		const mostRecentLottery = lotteries.records[0];
-		const currentTime = new Date();
-		const recordTime = new Date(mostRecentLottery.date);
+		const currentDate = new Date();
+		const recordDate = new Date(mostRecentLottery.date);
 
-		const timeDifferenceMs = currentTime.getTime() - recordTime.getTime();
-		const twelveHoursMs = 12 * 60 * 60 * 1000;
+		const currentDateOnly = new Date(
+			currentDate.getFullYear(),
+			currentDate.getMonth(),
+			currentDate.getDate(),
+		);
+		const recordDateOnly = new Date(
+			recordDate.getFullYear(),
+			recordDate.getMonth(),
+			recordDate.getDate(),
+		);
+
+		const isSameDate = currentDateOnly.getTime() === recordDateOnly.getTime();
 
 		console.log({
-			currentTime,
-			recordTime,
-			timeDifferenceMs,
-			result: timeDifferenceMs <= twelveHoursMs,
+			currentDate: currentDateOnly,
+			recordDate: recordDateOnly,
+			result: isSameDate,
 		});
 
-		return timeDifferenceMs <= twelveHoursMs;
+		return isSameDate;
 	} catch (error) {
 		console.error("Error checking recent lottery records:", error);
 		return false;
