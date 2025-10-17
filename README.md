@@ -19,6 +19,9 @@ STACK_SECRET_SERVER_KEY=
 
 # API
 API_KEY=
+
+# Open Router AI
+LLM_API_KEY=
 ```
 
 Second, run the development server:

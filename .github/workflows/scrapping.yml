@@ -6,7 +6,7 @@ on:
   
 jobs:
   scraping:
-    timeout-minutes: 60
+    timeout-minutes: 3
     runs-on: ubuntu-latest
     env:
       TURSO_DATABASE_URL: ${{ secrets.TURSO_DATABASE_URL }}
