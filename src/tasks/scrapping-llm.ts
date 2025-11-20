@@ -1,4 +1,5 @@
 const LLM_API_KEY = process.env.LLM_API_KEY;
+const LLM_API_MODEL = process.env.LLM_API_MODEL;
 
 class FetchError extends Error {
 	constructor(
@@ -31,7 +32,6 @@ class LotteryScraper {
 		"https://www.laestrella.com.pa/tag/-/meta/lnb-loteria-nacional-de-beneficencia";
 	private readonly OPENROUTER_API_URL =
 		"https://openrouter.ai/api/v1/chat/completions";
-	private readonly LLM_MODEL = "deepseek/deepseek-chat-v3.1";
 
 	/**
 	 * Fetches the main lottery page HTML
@@ -59,7 +59,7 @@ class LotteryScraper {
 			method: "POST",
 			headers: this.getLLMHeaders(),
 			body: JSON.stringify({
-				model: this.LLM_MODEL,
+				model: LLM_API_MODEL,
 				messages: [
 					{
 						role: "user",
@@ -112,7 +112,7 @@ class LotteryScraper {
 			method: "POST",
 			headers: this.getLLMHeaders(),
 			body: JSON.stringify({
-				model: this.LLM_MODEL,
+				model: LLM_API_MODEL,
 				messages: [
 					{
 						role: "user",

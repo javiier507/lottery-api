@@ -8,4 +8,4 @@ scrapping:
 	act --secret-file .env --workflows .github/workflows/scrapping.yml
 
 scrapping-llm:
-	act --secret-file .env --workflows .github/workflows/scrapping-llm.yml --job scrapping-llm
+	act --secret-file .env --var-file .env --workflows .github/workflows/scrapping-llm.yml --job scrapping-llm
