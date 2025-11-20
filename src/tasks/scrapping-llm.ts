@@ -11,42 +11,44 @@ class FetchError extends Error {
 	}
 }
 
-(async () => {
-	console.time("Scrapping LLM Execution");
-	try {
-		// 1. Obtener fecha actual
-		const currentDate = new Date();
-		console.log("Fecha actual:", currentDate.toLocaleDateString("es-PA"));
+class LotteryScraper {
+	private readonly MAIN_PAGE_URL =
+		"https://www.laestrella.com.pa/tag/-/meta/lnb-loteria-nacional-de-beneficencia";
+	private readonly OPENROUTER_API_URL =
+		"https://openrouter.ai/api/v1/chat/completions";
+	private readonly LLM_MODEL = "deepseek/deepseek-chat-v3.1";
 
-		// 2. Obtener página principal de lotería
+	/**
+	 * Fetches the main lottery page HTML
+	 */
+	private async fetchMainPage(): Promise<string> {
 		console.log("Obteniendo página principal de lotería...");
-		const mainPageUrl =
-			"https://www.laestrella.com.pa/tag/-/meta/lnb-loteria-nacional-de-beneficencia";
-		const mainPageResponse = await fetch(mainPageUrl);
+		const response = await fetch(this.MAIN_PAGE_URL);
 
-		if (!mainPageResponse.ok) {
-			const responseBody = await mainPageResponse.text();
-			throw new FetchError(mainPageUrl, mainPageResponse.status, responseBody);
+		if (!response.ok) {
+			const responseBody = await response.text();
+			throw new FetchError(this.MAIN_PAGE_URL, response.status, responseBody);
 		}
 
-		const mainPageHtml = await mainPageResponse.text();
+		return await response.text();
+	}
 
-		// 3. Usar OpenRouter para analizar y extraer enlaces de sorteos
-		const analysisUrl = "https://openrouter.ai/api/v1/chat/completions";
-		const analysisResponse = await fetch(analysisUrl, {
+	/**
+	 * Analyzes HTML content using LLM to find the most recent lottery results URL
+	 */
+	private async findMostRecentLotteryUrl(
+		htmlContent: string,
+		currentDate: Date,
+	): Promise<string> {
+		const response = await fetch(this.OPENROUTER_API_URL, {
 			method: "POST",
-			headers: {
-				Authorization: `Bearer ${LLM_API_KEY}`,
-				"HTTP-Referer": "https://lottery-pty.vercel.app/",
-				"X-Title": "Lotería de Panamá",
-				"Content-Type": "application/json",
-			},
+			headers: this.getLLMHeaders(),
 			body: JSON.stringify({
-				model: "deepseek/deepseek-chat-v3.1",
+				model: this.LLM_MODEL,
 				messages: [
 					{
 						role: "user",
-						content: `Analiza esta página HTML de la lotería de Panamá. La fecha actual es ${currentDate.toLocaleDateString("es-PA")}. Busca enlaces que contengan la palabra "Resultados" en el texto del enlace y que tengan la fecha MÁS CERCANA a la fecha actual (puede ser la fecha actual o días anteriores). Extrae SOLO la URL del enlace de resultados con la fecha más reciente. Responde únicamente con la URL:\n\n${mainPageHtml}`,
+						content: `Analiza esta página HTML de la lotería de Panamá. La fecha actual es ${currentDate.toLocaleDateString("es-PA")}. Busca enlaces que contengan la palabra "Resultados" en el texto del enlace y que tengan la fecha MÁS CERCANA a la fecha actual (puede ser la fecha actual o días anteriores). Extrae SOLO la URL del enlace de resultados con la fecha más reciente. Responde únicamente con la URL:\n\n${htmlContent}`,
 					},
 				],
 				max_tokens: 100,
@@ -54,47 +56,48 @@ class FetchError extends Error {
 			}),
 		});
 
-		if (!analysisResponse.ok) {
-			const responseBody = await analysisResponse.text();
-			throw new FetchError(analysisUrl, analysisResponse.status, responseBody);
-		}
-
-		const analysisData = await analysisResponse.json();
-		const mostRecentUrl = analysisData.choices[0].message.content.trim();
-		console.log("URL del sorteo más reciente encontrada:");
-		console.log(mostRecentUrl);
-
-		// 4. Validar que se obtuvo una URL válida
-		if (!mostRecentUrl.startsWith("http")) {
-			throw new Error("No se encontró una URL válida del sorteo más reciente");
-		}
-		console.log("Obteniendo datos del sorteo más reciente:", mostRecentUrl);
-
-		const lotteryPageResponse = await fetch(mostRecentUrl);
-
-		if (!lotteryPageResponse.ok) {
-			const responseBody = await lotteryPageResponse.text();
+		if (!response.ok) {
+			const responseBody = await response.text();
 			throw new FetchError(
-				mostRecentUrl,
-				lotteryPageResponse.status,
+				this.OPENROUTER_API_URL,
+				response.status,
 				responseBody,
 			);
 		}
 
-		const lotteryPageHtml = await lotteryPageResponse.text();
+		const data = await response.json();
+		const url = data.choices[0].message.content.trim();
 
-		// 5. Extraer datos específicos del sorteo usando OpenRouter
-		const dataExtractionUrl = "https://openrouter.ai/api/v1/chat/completions";
-		const dataExtractionResponse = await fetch(dataExtractionUrl, {
+		console.log("URL del sorteo más reciente encontrada:");
+		console.log(url);
+
+		return url;
+	}
+
+	/**
+	 * Fetches the lottery page HTML from a specific URL
+	 */
+	private async fetchLotteryPage(url: string): Promise<string> {
+		console.log("Obteniendo datos del sorteo más reciente:", url);
+		const response = await fetch(url);
+
+		if (!response.ok) {
+			const responseBody = await response.text();
+			throw new FetchError(url, response.status, responseBody);
+		}
+
+		return await response.text();
+	}
+
+	/**
+	 * Extracts lottery data from HTML content using LLM
+	 */
+	private async extractLotteryData(htmlContent: string): Promise<string> {
+		const response = await fetch(this.OPENROUTER_API_URL, {
 			method: "POST",
-			headers: {
-				Authorization: `Bearer ${LLM_API_KEY}`,
-				"HTTP-Referer": "https://lottery-pty.vercel.app/",
-				"X-Title": "Lotería de Panamá",
-				"Content-Type": "application/json",
-			},
+			headers: this.getLLMHeaders(),
 			body: JSON.stringify({
-				model: "deepseek/deepseek-chat-v3.1",
+				model: this.LLM_MODEL,
 				messages: [
 					{
 						role: "user",
@@ -108,7 +111,7 @@ class FetchError extends Error {
             - numero_sorteo: número del sorteo (puede aparecer con "No." al inicio)
             - fecha: fecha del sorteo
 
-            Responde SOLO con un objeto JSON válido con estos datos:\n\n${lotteryPageHtml}`,
+            Responde SOLO con un objeto JSON válido con estos datos:\n\n${htmlContent}`,
 					},
 				],
 				max_tokens: 150,
@@ -116,20 +119,78 @@ class FetchError extends Error {
 			}),
 		});
 
-		if (!dataExtractionResponse.ok) {
-			const responseBody = await dataExtractionResponse.text();
+		if (!response.ok) {
+			const responseBody = await response.text();
 			throw new FetchError(
-				dataExtractionUrl,
-				dataExtractionResponse.status,
+				this.OPENROUTER_API_URL,
+				response.status,
 				responseBody,
 			);
 		}
 
-		const extractionData = await dataExtractionResponse.json();
-		const lotteryResults = extractionData.choices[0].message.content;
+		const data = await response.json();
+		return data.choices[0].message.content;
+	}
+
+	/**
+	 * Returns the common headers needed for LLM API requests
+	 */
+	private getLLMHeaders(): Record<string, string> {
+		return {
+			Authorization: `Bearer ${LLM_API_KEY}`,
+			"HTTP-Referer": "https://lottery-pty.vercel.app/",
+			"X-Title": "Lotería de Panamá",
+			"Content-Type": "application/json",
+		};
+	}
+
+	/**
+	 * Validates that the URL is valid
+	 */
+	private validateUrl(url: string): void {
+		if (!url.startsWith("http")) {
+			throw new Error("No se encontró una URL válida del sorteo más reciente");
+		}
+	}
+
+	/**
+	 * Main method to scrape and extract lottery results
+	 */
+	async scrape(): Promise<string> {
+		const currentDate = new Date();
+		console.log("Fecha actual:", currentDate.toLocaleDateString("es-PA"));
+
+		// Fetch main page
+		const mainPageHtml = await this.fetchMainPage();
+
+		// Find most recent lottery URL
+		const mostRecentUrl = await this.findMostRecentLotteryUrl(
+			mainPageHtml,
+			currentDate,
+		);
+
+		// Validate URL
+		this.validateUrl(mostRecentUrl);
+
+		// Fetch lottery page
+		const lotteryPageHtml = await this.fetchLotteryPage(mostRecentUrl);
+
+		// Extract lottery data
+		const lotteryResults = await this.extractLotteryData(lotteryPageHtml);
+
+		return lotteryResults;
+	}
+}
+
+// Main execution
+(async () => {
+	console.time("Scrapping LLM Execution");
+	try {
+		const scraper = new LotteryScraper();
+		const results = await scraper.scrape();
 
 		console.log("\n=== RESULTADOS DE LA LOTERÍA DE PANAMÁ ===");
-		console.log(lotteryResults);
+		console.log(results);
 	} catch (error) {
 		if (error instanceof FetchError) {
 			console.error("\n=== ERROR EN PETICIÓN FETCH ===");
