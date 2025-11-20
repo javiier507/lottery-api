@@ -9,6 +9,21 @@ class FetchError extends Error {
 		super(`Fetch error: ${statusCode} for ${url}`);
 		this.name = "FetchError";
 	}
+
+	print(): void {
+		console.error(
+			JSON.stringify(
+				{
+					error: "ERROR EN PETICIÓN FETCH",
+					url: this.url,
+					statusCode: this.statusCode,
+					responseBody: this.responseBody,
+				},
+				null,
+				2,
+			),
+		);
+	}
 }
 
 class LotteryScraper {
@@ -193,13 +208,19 @@ class LotteryScraper {
 		console.log(results);
 	} catch (error) {
 		if (error instanceof FetchError) {
-			console.error("\n=== ERROR EN PETICIÓN FETCH ===");
-			console.error("URL:", error.url);
-			console.error("Código HTTP:", error.statusCode);
-			console.error("Cuerpo de la respuesta:", error.responseBody);
+			error.print();
 		} else {
-			console.error("\n=== ERROR GENÉRICO ===");
-			console.error("Error:", error);
+			console.error(
+				JSON.stringify(
+					{
+						error: "ERROR GENÉRICO",
+						message: error instanceof Error ? error.message : String(error),
+						stack: error instanceof Error ? error.stack : undefined,
+					},
+					null,
+					2,
+				),
+			);
 		}
 	} finally {
 		console.timeEnd("Scrapping LLM Execution");
