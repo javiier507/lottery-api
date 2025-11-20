@@ -1,4 +1,4 @@
-import { LLM_API_KEY } from "@/utils/environment";
+const LLM_API_KEY = process.env.LLM_API_KEY;
 
 class FetchError extends Error {
 	constructor(
