@@ -6,7 +6,7 @@ on:
 
 jobs:
   scrapping-llm:
-    timeout-minutes: 60
+    timeout-minutes: 5
     runs-on: ubuntu-latest
     env:
       LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
