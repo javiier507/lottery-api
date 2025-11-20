@@ -22,6 +22,7 @@ API_KEY=
 
 # Open Router AI
 LLM_API_KEY=
+LLM_API_MODEL=
 ```
 
 Second, run the development server:
