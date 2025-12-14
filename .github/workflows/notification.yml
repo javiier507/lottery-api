@@ -11,10 +11,14 @@ jobs:
       TURSO_AUTH_TOKEN: ${{ secrets.TURSO_AUTH_TOKEN }}
     steps:
     - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
+      with:
+        version: 9
     - uses: actions/setup-node@v4
       with:
         node-version: '22'
+        cache: 'pnpm'
     - name: Install dependencies
-      run: npm ci
+      run: pnpm install --frozen-lockfile
     - name: Send notifications
-      run: npx tsx src/tasks/notification.ts
+      run: pnpm exec tsx src/tasks/notification.ts
