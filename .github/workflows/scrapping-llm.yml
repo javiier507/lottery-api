@@ -13,8 +13,9 @@ jobs:
       LLM_API_MODEL: ${{ vars.LLM_API_MODEL }}
     steps:
     - uses: actions/checkout@v4
+    - uses: pnpm/action-setup@v4
     - uses: actions/setup-node@v4
       with:
         node-version: '22'
     - name: Run scrapping LLM
-      run: npx tsx src/tasks/scrapping-llm.ts
+      run: pnpm dlx tsx src/tasks/scrapping-llm.ts
