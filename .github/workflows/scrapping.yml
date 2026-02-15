@@ -48,7 +48,7 @@ jobs:
       if: steps.cache-playwright-deps.outputs.cache-hit != 'true'
 
     - name: Run Playwright tests
-      run: pnpm playwright test scraping.spec.ts
+      run: pnpm playwright test
     
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}

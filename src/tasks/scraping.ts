@@ -1,6 +1,6 @@
 import { chromium } from "playwright";
 
-import { Lottery } from "@/types/lottery";
+import type { Lottery } from "@/types/lottery";
 import { getDate } from "@/utils/date";
 
 export async function getLotteryData(): Promise<Lottery[]> {
