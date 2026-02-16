@@ -1,11 +1,11 @@
-name: Scrapping LLM
+name: Scraping LLM
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 21 * * *'
 
 jobs:
-  scrapping-llm:
+  scraping-llm:
     timeout-minutes: 5
     runs-on: ubuntu-latest
     env:
@@ -17,5 +17,5 @@ jobs:
     - uses: actions/setup-node@v4
       with:
         node-version: '22'
-    - name: Run scrapping LLM
-      run: pnpm dlx tsx src/tasks/scrapping-llm.ts
+    - name: Run scraping LLM
+      run: pnpm dlx tsx src/tasks/scraping-llm.ts

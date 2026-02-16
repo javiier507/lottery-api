@@ -1,4 +1,4 @@
-name: Scrapping
+name: Scraping
 on:
   schedule:
     - cron: "30/5 20 * * *"
