@@ -1,7 +1,7 @@
 import { chromium } from "playwright";
 
 import type { Lottery, Kind } from "@/types/lottery";
-import { KindMap } from "@/types/lottery";
+import { TelemetroKindMap } from "@/types/lottery";
 
 function extractValue(text: string, pattern: RegExp): string {
 	const match = text.match(pattern);
@@ -10,7 +10,7 @@ function extractValue(text: string, pattern: RegExp): string {
 
 function extractKindFromTitle(title: string): Kind | undefined {
 	const titleLower = title.toLowerCase();
-	for (const [key, value] of Object.entries(KindMap)) {
+	for (const [key, value] of Object.entries(TelemetroKindMap)) {
 		if (titleLower.includes(key)) {
 			return value;
 		}
