@@ -199,7 +199,7 @@ class LotteryScraper {
 
 // Main execution
 (async () => {
-	console.time("Scrapping LLM Execution");
+	console.time("Scraping LLM Execution");
 	try {
 		const scraper = new LotteryScraper();
 		const results = await scraper.scrape();
@@ -223,6 +223,6 @@ class LotteryScraper {
 			);
 		}
 	} finally {
-		console.timeEnd("Scrapping LLM Execution");
+		console.timeEnd("Scraping LLM Execution");
 	}
 })();
