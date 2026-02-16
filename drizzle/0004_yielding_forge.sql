@@ -1,0 +1,1 @@
+ALTER TABLE `lottery` ADD `kind` integer;

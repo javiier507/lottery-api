@@ -10,7 +10,7 @@ export type Lottery = {
 	letters?: string | null;
 	serie?: string | null;
 	folio?: string | null;
-	kind?: Kind;
+	kind?: Kind | null;
 };
 
 export const NationalLotteryKindMap: Record<number, Kind> = {
