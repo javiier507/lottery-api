@@ -11,6 +11,7 @@ export const LotteryTable = sqliteTable("lottery", {
 	letters: text(),
 	serie: text(),
 	folio: text(),
+	kind: int(),
 });
 
 export const DeviceTable = sqliteTable("device", {

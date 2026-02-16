@@ -1,6 +1,6 @@
 import { chromium } from "playwright";
 
-import type { Lottery } from "@/types/lottery";
+import { NationalLotteryKindMap, type Lottery } from "@/types/lottery";
 import { getDate } from "@/utils/date";
 
 export async function getLotteryData(): Promise<Lottery[]> {
@@ -12,6 +12,7 @@ export async function getLotteryData(): Promise<Lottery[]> {
 
 	await page.goto("http://www.lnb.gob.pa/");
 
+	let index = 0;
 	for (const container of await page.locator("div.containerTablero").all()) {
 		const draw = await container.locator(".sorteo-number > div").textContent();
 
@@ -35,6 +36,7 @@ export async function getLotteryData(): Promise<Lottery[]> {
 		const letters = await details[0].textContent();
 		const serie = await details[1].textContent();
 		const folio = await details[2].textContent();
+		const kind = NationalLotteryKindMap[index];
 
 		console.table([
 			draw,
@@ -46,6 +48,7 @@ export async function getLotteryData(): Promise<Lottery[]> {
 			letters,
 			serie,
 			folio,
+			kind,
 		]);
 
 		if (draw && dateStr && date && first && second && third) {
@@ -59,8 +62,10 @@ export async function getLotteryData(): Promise<Lottery[]> {
 				letters,
 				serie,
 				folio,
+				kind,
 			});
 		}
+		index++;
 	}
 
 	await context.close();

@@ -1,10 +1,21 @@
 import { chromium } from "playwright";
 
-import type { Lottery } from "@/types/lottery";
+import type { Lottery, Kind } from "@/types/lottery";
+import { TelemetroKindMap } from "@/types/lottery";
 
 function extractValue(text: string, pattern: RegExp): string {
 	const match = text.match(pattern);
 	return match ? match[1].trim() : "";
+}
+
+function extractKindFromTitle(title: string): Kind | undefined {
+	const titleLower = title.toLowerCase();
+	for (const [key, value] of Object.entries(TelemetroKindMap)) {
+		if (titleLower.includes(key)) {
+			return value;
+		}
+	}
+	return undefined;
 }
 
 export async function getLotteryData(): Promise<Lottery> {
@@ -35,6 +46,8 @@ export async function getLotteryData(): Promise<Lottery> {
 
 	const pageTitle = await page.title();
 	console.log("Título de la página:", pageTitle);
+
+	const kind = extractKindFromTitle(pageTitle);
 
 	const liveblogContent = page
 		.locator("div.liveblog-content.liveblog-body")
@@ -96,5 +109,6 @@ export async function getLotteryData(): Promise<Lottery> {
 		letters,
 		serie,
 		folio,
+		kind,
 	};
 }

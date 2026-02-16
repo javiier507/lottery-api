@@ -1,0 +1,11 @@
+### Health Check
+GET http://localhost:3000/api/health-check
+X-API-KEY: {{$dotenv API_KEY}}
+
+### Get Lotteries
+GET http://localhost:3000/api/public/lotteries
+X-API-KEY: {{$dotenv API_KEY}}
+
+### Get Lotteries with Pagination
+GET http://localhost:3000/api/public/lotteries?limit=30&offset=0
+X-API-KEY: {{$dotenv API_KEY}}
