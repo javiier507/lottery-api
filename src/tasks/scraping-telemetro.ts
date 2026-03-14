@@ -1,5 +1,7 @@
 import { chromium } from "playwright";
 
+import { parseSemanticDate } from "@/utils/parse-semantic-date";
+
 import type { Lottery, Kind } from "@/types/lottery";
 import { TelemetroKindMap } from "@/types/lottery";
 
@@ -37,7 +39,7 @@ export async function getLotteryData(): Promise<Lottery> {
 	});
 
 	const lotteryLink = page
-		.locator('a:has-text("EN VIVO | Resultados del sorteo")')
+		.locator('a:has-text("EN VIVO | Resultados")')
 		.first();
 
 	await lotteryLink.waitFor({ timeout: 10000 });
@@ -92,7 +94,7 @@ export async function getLotteryData(): Promise<Lottery> {
 		}
 	}
 
-	const date = new Date();
+	const date = parseSemanticDate(pageTitle);
 
 	await context.close();
 	await browser.close();
