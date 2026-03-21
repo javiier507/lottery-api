@@ -60,3 +60,7 @@ export function calculateMinutesBetweenDates(date1: Date, date2: Date): number {
 	const diff = date2.getTime() - date1.getTime();
 	return Math.floor(diff / (1000 * 60));
 }
+
+export function isSameDay(a: string, b: string): boolean {
+	return a.slice(0, 10) === b.slice(0, 10);
+}
