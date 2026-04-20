@@ -17,9 +17,11 @@ const SPANISH_MONTHS: Record<string, string> = {
 
 function translateSpanishDate(text: string): string {
 	return text.replace(
-		/(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+de\s+(\d{4})/gi,
-		(_, day, month, year) =>
-			`${day} ${SPANISH_MONTHS[month.toLowerCase()]} ${year}`,
+		/(\d{1,2})\s+de\s+(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(?:\s+de\s+(\d{4}))?/gi,
+		(_, day, month, year) => {
+			const resolvedYear = year ?? new Date().getFullYear();
+			return `${day} ${SPANISH_MONTHS[month.toLowerCase()]} ${resolvedYear}`;
+		},
 	);
 }
 
