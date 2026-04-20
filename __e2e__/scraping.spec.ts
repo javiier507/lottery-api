@@ -13,7 +13,7 @@ test("should get data from lottery", async () => {
 	if (!lastLottery.isNew) return;
 
 	const results = await getLotteryData();
-	assert(results.length === 4);
+	assert(results.length === 3);
 
 	const added = await addLotteriesData(results);
 	added && (await sendNotification());

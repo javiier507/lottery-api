@@ -40,6 +40,15 @@ describe("parseSemanticDate", () => {
 		}
 	});
 
+	it("defaults to current year when no year is in the text", () => {
+		const result = parseSemanticDate(
+			"EN VIVO | Resultados del Sorteo Extraordinario de la Lotería Nacional este 19 de abril",
+		);
+		expect(result.getFullYear()).toBe(new Date().getFullYear());
+		expect(result.getMonth()).toBe(3); // abril = 3
+		expect(result.getDate()).toBe(19);
+	});
+
 	it("throws when date cannot be parsed", () => {
 		expect(() => parseSemanticDate("texto sin fecha")).toThrow();
 	});
