@@ -35,6 +35,6 @@ test("should get data from lottery", async () => {
 		return;
 	}
 
-	/* const added = await addLotteriesData([telemetroResult]);
-	added && (await sendNotification()); */
+	const added = await addLotteriesData([telemetroResult]);
+	added && (await sendNotification());
 });

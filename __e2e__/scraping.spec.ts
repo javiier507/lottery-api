@@ -5,7 +5,7 @@ import { getLotteryData } from "@/tasks/scraping";
 import { addLotteriesData, getLastLottery } from "@/tasks/database";
 import { sendNotification } from "@/tasks/notification";
 
-test("should get data from lottery", async () => {
+test.skip("should get data from lottery", async () => {
 	test.setTimeout(180_000);
 
 	const lastLottery = await getLastLottery();
