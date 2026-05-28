@@ -48,3 +48,22 @@ export async function getLotteryDrawsByDraws(
 		.from(LotteryTable)
 		.where(inArray(LotteryTable.draw, draws));
 }
+
+export async function getLotteryByDraw(
+	draw: string,
+): Promise<Lottery | undefined> {
+	const [record] = await db
+		.select()
+		.from(LotteryTable)
+		.where(eq(LotteryTable.draw, draw))
+		.limit(1);
+
+	return record as Lottery | undefined;
+}
+
+export async function updateLottery(draw: string, lottery: Partial<Lottery>) {
+	return db
+		.update(LotteryTable)
+		.set(lottery)
+		.where(eq(LotteryTable.draw, draw));
+}

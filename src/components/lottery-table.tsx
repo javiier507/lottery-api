@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import type { Lottery } from "@/types/lottery";
 
 interface LotteryTableProps {
@@ -51,6 +53,9 @@ export default function LotteryTable({ lotteries = [] }: LotteryTableProps) {
 								<th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
 									Kind
 								</th>
+								<th className="px-6 py-3 text-left text-sm font-medium text-gray-500">
+									Actions
+								</th>
 							</tr>
 						</thead>
 						<tbody className="divide-y divide-gray-200 bg-white">
@@ -85,6 +90,14 @@ export default function LotteryTable({ lotteries = [] }: LotteryTableProps) {
 									</td>
 									<td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
 										{lottery.kind ?? "-"}
+									</td>
+									<td className="whitespace-nowrap px-6 py-4 text-sm">
+										<Link
+											href={`/management/${encodeURIComponent(lottery.draw)}/edit`}
+											className="text-blue-600 hover:underline"
+										>
+											Edit
+										</Link>
 									</td>
 								</tr>
 							))}
@@ -161,6 +174,14 @@ export default function LotteryTable({ lotteries = [] }: LotteryTableProps) {
 									<p className="mt-1 text-sm text-gray-900">{lottery.kind}</p>
 								</div>
 							)}
+						</div>
+						<div className="mt-4">
+							<Link
+								href={`/management/${encodeURIComponent(lottery.draw)}/edit`}
+								className="text-sm text-blue-600 hover:underline"
+							>
+								Edit
+							</Link>
 						</div>
 					</div>
 				))}

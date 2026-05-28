@@ -21,6 +21,7 @@ type LotteryFormValues = z.infer<typeof lotterySchema>;
 
 export function LotteryForm(props: {
 	onSubmit: (data: LotteryFormValues) => Promise<void>;
+	defaultValues?: Partial<LotteryFormValues>;
 }) {
 	const {
 		register,
@@ -28,6 +29,7 @@ export function LotteryForm(props: {
 		formState: { errors, isSubmitting, isSubmitSuccessful },
 	} = useForm<LotteryFormValues>({
 		resolver: zodResolver(lotterySchema),
+		defaultValues: props.defaultValues,
 	});
 
 	async function onSubmit(data: LotteryFormValues) {
