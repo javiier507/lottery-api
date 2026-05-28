@@ -14,7 +14,7 @@ const lotterySchema = z.object({
 	letters: z.string().nullable().optional(),
 	serie: z.string().nullable().optional(),
 	folio: z.string().nullable().optional(),
-	kind: z.string().nullable().optional(),
+	kind: z.coerce.number().min(1, "Kind is required"),
 });
 
 type LotteryFormValues = z.infer<typeof lotterySchema>;
@@ -207,7 +207,7 @@ export function LotteryForm(props: {
 						id="kind"
 						className="w-full rounded-md border border-gray-200 px-3 py-2 text-sm outline-none focus:border-gray-400"
 					>
-						<option value="">Select kind (optional)</option>
+						<option value="">Select kind</option>
 						<option value="1">Dominical (1)</option>
 						<option value="2">Miercolito (2)</option>
 						<option value="3">Gordito (3)</option>
