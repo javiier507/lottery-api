@@ -1,10 +1,11 @@
 name: Scraping
 on:
   schedule:
+    - cron: "35 19 * * *"
     - cron: "35 20 * * *"
     - cron: "50 20 * * *"
   workflow_dispatch:
-  
+
 jobs:
   scraping:
     timeout-minutes: 5
@@ -50,7 +51,7 @@ jobs:
 
     - name: Run Playwright tests
       run: pnpm playwright test
-    
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
