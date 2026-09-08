@@ -49,6 +49,13 @@ describe("parseSemanticDate", () => {
 		expect(result.getDate()).toBe(19);
 	});
 
+	it("parses the news-headline__date time format (no 'de' before year)", () => {
+		const result = parseSemanticDate("6 de septiembre 2026 - 15:35hs");
+		expect(result.getFullYear()).toBe(2026);
+		expect(result.getMonth()).toBe(8); // septiembre = 8
+		expect(result.getDate()).toBe(6);
+	});
+
 	it("throws when date cannot be parsed", () => {
 		expect(() => parseSemanticDate("texto sin fecha")).toThrow();
 	});

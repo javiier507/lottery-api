@@ -1,23 +1,13 @@
 import { chromium } from "playwright";
 
+import { extractKindFromTitle } from "@/utils/extract-kind-from-title";
 import { parseSemanticDate } from "@/utils/parse-semantic-date";
 
-import type { Lottery, Kind } from "@/types/lottery";
-import { TelemetroKindMap } from "@/types/lottery";
+import type { Lottery } from "@/types/lottery";
 
 function extractValue(text: string, pattern: RegExp): string {
 	const match = text.match(pattern);
 	return match ? match[1].trim() : "";
-}
-
-function extractKindFromTitle(title: string): Kind | undefined {
-	const titleLower = title.toLowerCase();
-	for (const [key, value] of Object.entries(TelemetroKindMap)) {
-		if (titleLower.includes(key)) {
-			return value;
-		}
-	}
-	return undefined;
 }
 
 export async function getLotteryData(): Promise<Lottery> {
@@ -50,6 +40,11 @@ export async function getLotteryData(): Promise<Lottery> {
 	console.log("Título de la página:", pageTitle);
 
 	const kind = extractKindFromTitle(pageTitle);
+
+	const dateElement = page.locator("span.news-headline__date time").first();
+	await dateElement.waitFor({ timeout: 10000 });
+	const dateText = ((await dateElement.textContent()) || "").trim();
+	console.log("Fecha de la página:", dateText);
 
 	const liveblogContent = page
 		.locator("div.liveblog-content.liveblog-body")
@@ -94,7 +89,7 @@ export async function getLotteryData(): Promise<Lottery> {
 		}
 	}
 
-	const date = parseSemanticDate(pageTitle);
+	const date = parseSemanticDate(dateText);
 
 	await context.close();
 	await browser.close();
