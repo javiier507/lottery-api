@@ -37,7 +37,9 @@ export async function sendNotification() {
 		),
 	);
 
-	console.log(results);
+	console.log(
+		`📨 Sent ${notifications.length} notification(s) in ${batches.length} batch(es)`,
+	);
 	return results;
 }
 

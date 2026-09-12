@@ -13,13 +13,6 @@ export type Lottery = {
 	kind?: Kind | null;
 };
 
-export const NationalLotteryKindMap: Record<number, Kind> = {
-	0: 1,
-	1: 2,
-	2: 3,
-	3: 4,
-} as const;
-
 export const TelemetroKindMap: Record<string, Kind> = {
 	dominical: 1,
 	miercolito: 2,

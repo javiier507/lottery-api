@@ -3,7 +3,7 @@ import { defineConfig } from "vitest/config";
 
 export default defineConfig({
 	test: {
-		dir: "./tests",
+		exclude: ["**/node_modules/**", "**/.next/**", "__e2e__/**"],
 	},
 	resolve: {
 		alias: {

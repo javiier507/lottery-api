@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { getMaxAge } from "../src/utils/cache";
+import { getMaxAge } from "./cache";
 
 describe("max age", () => {
 	it("when is earlier than 20:00 utc", () => {

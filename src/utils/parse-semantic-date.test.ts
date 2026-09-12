@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseSemanticDate } from "../src/utils/parse-semantic-date";
+import { parseSemanticDate } from "./parse-semantic-date";
 
 describe("parseSemanticDate", () => {
 	it("parses a full Spanish date string", () => {
