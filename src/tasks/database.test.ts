@@ -1,14 +1,14 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { getLastLottery } from "../../src/tasks/database";
+import { getLastLottery } from "./database";
 
-vi.mock("../../src/db/repositories/lottery.repository", () => ({
+vi.mock("../db/repositories/lottery.repository", () => ({
 	addLotteries: vi.fn(),
 	getLotteryDrawsByDraws: vi.fn(),
 	getLotteries: vi.fn(),
 }));
 
-import { getLotteries } from "../../src/db/repositories/lottery.repository";
+import { getLotteries } from "../db/repositories/lottery.repository";
 
 const mockGetLotteries = vi.mocked(getLotteries);
 

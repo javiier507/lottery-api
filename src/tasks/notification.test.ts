@@ -1,11 +1,11 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("../../src/db/repositories/device.repository", () => ({
+vi.mock("../db/repositories/device.repository", () => ({
 	getDevicesToken: vi.fn(),
 }));
 
-import { getDevicesToken } from "../../src/db/repositories/device.repository";
-import { sendNotification } from "../../src/tasks/notification";
+import { getDevicesToken } from "../db/repositories/device.repository";
+import { sendNotification } from "./notification";
 
 const mockGetDevicesToken = vi.mocked(getDevicesToken);
 const mockFetch = vi.fn();

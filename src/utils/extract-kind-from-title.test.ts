@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { extractKindFromTitle } from "../src/utils/extract-kind-from-title";
+import { extractKindFromTitle } from "./extract-kind-from-title";
 
 describe("extractKindFromTitle", () => {
 	it("detects dominical", () => {
