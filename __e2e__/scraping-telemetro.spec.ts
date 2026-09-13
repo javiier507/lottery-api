@@ -2,46 +2,19 @@ import assert from "node:assert";
 import { test } from "@playwright/test";
 
 import { getLotteryData } from "@/tasks/scraping-telemetro";
-import { addLotteriesData, getLastLottery } from "@/tasks/database";
-import { mapTelemetro } from "@/tasks/telemetro";
-import { sendNotification } from "@/tasks/notification";
-import { isSameDay } from "@/utils/date";
 
-test("should get data from lottery", async () => {
-	test.setTimeout(180_000);
-
-	const lastLottery = await getLastLottery();
-	console.log(lastLottery);
-	if (!lastLottery.isNew) return;
+test("getLotteryData scrapes prizes, date and kind from telemetro", async () => {
+	test.setTimeout(60_000);
 
 	const result = await getLotteryData();
 	console.log(result);
-	if (
-		result.firstPrize.length +
-			result.secondPrize.length +
-			result.thirdPrize.length ===
-		0
-	)
-		return;
 
-	assert(result !== undefined, "Result should not be undefined");
-
-	const telemetroResult = await mapTelemetro(result);
-	console.log(telemetroResult);
-
+	assert(result.firstPrize.length > 0, "firstPrize should not be empty");
+	assert(result.secondPrize.length > 0, "secondPrize should not be empty");
+	assert(result.thirdPrize.length > 0, "thirdPrize should not be empty");
 	assert(
-		telemetroResult !== undefined,
-		"Telemetro Result should not be undefined",
+		!Number.isNaN(Date.parse(result.date)),
+		"date should be a valid ISO date",
 	);
-
-	if (
-		lastLottery.lastRecord &&
-		isSameDay(lastLottery.lastRecord.date, telemetroResult.date)
-	) {
-		console.log("Lottery draw already exists");
-		return;
-	}
-
-	const added = await addLotteriesData([telemetroResult]);
-	added && (await sendNotification());
+	assert(result.kind !== undefined, "kind should be recognized from the title");
 });
