@@ -1,6 +1,7 @@
 import { chromium } from "playwright";
 
 import { extractKindFromTitle } from "@/utils/extract-kind-from-title";
+import { filterLiveResultsLinks } from "@/utils/find-lottery-link";
 import { parseSemanticDate } from "@/utils/parse-semantic-date";
 
 import type { Lottery } from "@/types/lottery";
@@ -28,13 +29,29 @@ export async function getLotteryData(): Promise<Lottery> {
 		timeout: 60000,
 	});
 
-	const lotteryLink = page
-		.locator('a:has-text("EN VIVO | Resultados")')
-		.first();
+	const hrefs = await page
+		.locator('a[href*="/entretenimiento/"]')
+		.evaluateAll((anchors) =>
+			anchors
+				.map((anchor) =>
+					anchor instanceof HTMLAnchorElement
+						? (anchor.getAttribute("href") ?? "")
+						: "",
+				)
+				.filter(Boolean),
+		);
 
-	await lotteryLink.waitFor({ timeout: 10000 });
-	await lotteryLink.click();
-	await page.waitForLoadState("domcontentloaded");
+	const [resultLink] = filterLiveResultsLinks(hrefs);
+	if (!resultLink) {
+		throw new Error(
+			`No live results article found among ${hrefs.length} links`,
+		);
+	}
+
+	await page.goto(resultLink, {
+		waitUntil: "domcontentloaded",
+		timeout: 60000,
+	});
 
 	const pageTitle = await page.title();
 	console.log("Título de la página:", pageTitle);
@@ -52,7 +69,9 @@ export async function getLotteryData(): Promise<Lottery> {
 
 	await liveblogContent.waitFor({ timeout: 10000 });
 
-	const paragraphs = await liveblogContent.locator("p").all();
+	const paragraphTexts = await liveblogContent
+		.locator("p, li")
+		.allTextContents();
 
 	let firstPrize = "";
 	let secondPrize = "";
@@ -61,31 +80,35 @@ export async function getLotteryData(): Promise<Lottery> {
 	let serie = "";
 	let folio = "";
 
-	for (const p of paragraphs) {
-		const text = (await p.textContent()) || "";
+	for (const raw of paragraphTexts) {
+		const text = raw.toLowerCase();
 
-		if (text.includes("PRIMER PREMIO:")) {
-			firstPrize = extractValue(text, /PRIMER PREMIO:\s*(\d+)/);
+		if (/primer premio/.test(text)) {
+			firstPrize = extractValue(raw, /primer premio:?\s*(\d+)/i);
 		}
 
-		if (text.includes("SEGUNDO PREMIO:")) {
-			secondPrize = extractValue(text, /SEGUNDO PREMIO:\s*(\d+)/);
+		if (/premio mayor/.test(text)) {
+			firstPrize = extractValue(raw, /premio mayor:?\s*(\d+)/i);
 		}
 
-		if (text.includes("TERCER PREMIO:")) {
-			thirdPrize = extractValue(text, /TERCER PREMIO:\s*(\d+)/);
+		if (/segundo premio/.test(text)) {
+			secondPrize = extractValue(raw, /segundo premio:?\s*(\d+)/i);
 		}
 
-		if (text.includes("Letras:")) {
-			letters = extractValue(text, /Letras:\s*([A-Z]+)/);
+		if (/tercer premio/.test(text)) {
+			thirdPrize = extractValue(raw, /tercer premio:?\s*(\d+)/i);
 		}
 
-		if (text.includes("Serie:")) {
-			serie = extractValue(text, /Serie:\s*(\d+)/);
+		if (/letras/.test(text)) {
+			letters = extractValue(raw, /letras:?\s*([a-z]+)/i).toUpperCase();
 		}
 
-		if (text.includes("Folio:")) {
-			folio = extractValue(text, /Folio:\s*(\d+)/);
+		if (/serie/.test(text)) {
+			serie = extractValue(raw, /serie:?\s*(\d+)/i);
+		}
+
+		if (/folio/.test(text)) {
+			folio = extractValue(raw, /folio:?\s*(\d+)/i);
 		}
 	}
 
