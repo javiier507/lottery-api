@@ -14,8 +14,9 @@ export type Lottery = {
 };
 
 export const TelemetroKindMap: Record<string, Kind> = {
+	// extraordinario first: titles like "dominical extraordinario" must match 4
+	extraordinario: 4,
 	dominical: 1,
 	miercolito: 2,
 	gordito: 3,
-	extraordinario: 4,
 } as const;
