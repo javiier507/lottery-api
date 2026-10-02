@@ -27,14 +27,6 @@ describe("extractKindFromTitle", () => {
 				),
 			).toBe(1);
 		});
-
-		it("gives extraordinario priority in a dominical extraordinario title", () => {
-			expect(
-				extractKindFromTitle(
-					"EN VIVO | Resultados del sorteo dominical extraordinario de la Lotería Nacional del 16 de agosto del 2026",
-				),
-			).toBe(4);
-		});
 	});
 
 	describe("miercolito", () => {
@@ -102,6 +94,14 @@ describe("extractKindFromTitle", () => {
 			expect(
 				extractKindFromTitle(
 					"EN VIVO | Resultados del Sorteo Extraordinario de la Lotería Nacional este 19 de abril",
+				),
+			).toBe(4);
+		});
+
+		it("gives extraordinario priority in a dominical extraordinario title", () => {
+			expect(
+				extractKindFromTitle(
+					"EN VIVO | Resultados del sorteo dominical extraordinario de la Lotería Nacional del 16 de agosto del 2026",
 				),
 			).toBe(4);
 		});
