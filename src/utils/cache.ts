@@ -1,67 +1,35 @@
-import {
-	calculateSecondsBetweenDates,
-	addMinutes,
-	calculateMinutesBetweenDates,
-} from "./date";
-
 type MaxAge = {
 	currentDate: Date;
 	expirationDate: Date;
 	seconds: number;
 };
 
-function getLimitDate(currentDate: Date) {
-	const limitDate = new Date(currentDate.toString());
-	limitDate.setUTCHours(20);
-	limitDate.setUTCMinutes(30);
-	limitDate.setUTCMilliseconds(0);
-	return limitDate;
-}
-
 export function getMaxAge(currentDate: Date): MaxAge {
-	currentDate.setUTCMilliseconds(0);
-	const hour = currentDate.getUTCHours();
-	const minutes = currentDate.getUTCMinutes();
+	// Panama (UTC-5): the short-cache window is 15:30–18:00 every day.
+	const windowStart = new Date(currentDate);
+	windowStart.setUTCHours(20, 30, 0, 0);
+	const windowEnd = new Date(currentDate);
+	windowEnd.setUTCHours(23, 0, 0, 0);
 
-	let expirationDate = new Date(currentDate.toString());
-
-	const setToLimitDate = () => {
-		const diffMinutes = calculateMinutesBetweenDates(
-			expirationDate,
-			getLimitDate(currentDate),
-		);
-		expirationDate = addMinutes(expirationDate, diffMinutes);
-	};
-
-	switch (true) {
-		case hour <= 18:
-			expirationDate = addMinutes(expirationDate, 60);
-			break;
-		case hour === 19:
-			setToLimitDate();
-			break;
-		case hour === 20 && minutes < 30:
-			setToLimitDate();
-			break;
-		case hour === 20 && minutes >= 30:
-			expirationDate = addMinutes(expirationDate, 2);
-			break;
-		case hour === 21 && minutes < 30:
-			expirationDate = addMinutes(expirationDate, 2);
-			break;
-		case hour === 21 && minutes >= 30:
-			expirationDate = addMinutes(expirationDate, 60);
-			break;
-		case hour >= 22:
-			expirationDate = addMinutes(expirationDate, 60);
-			break;
+	const inWindow = currentDate >= windowStart && currentDate < windowEnd;
+	const durationSeconds = inWindow ? 30 : 3600;
+	const nextBoundary = inWindow ? windowEnd : new Date(windowStart);
+	if (currentDate >= windowEnd) {
+		nextBoundary.setUTCDate(nextBoundary.getUTCDate() + 1);
 	}
 
-	const seconds = calculateSecondsBetweenDates(currentDate, expirationDate);
+	const expirationDate = new Date(
+		Math.min(
+			currentDate.getTime() + durationSeconds * 1000,
+			nextBoundary.getTime(),
+		),
+	);
 
 	return {
 		currentDate,
 		expirationDate,
-		seconds: Math.trunc(seconds),
+		seconds: Math.floor(
+			(expirationDate.getTime() - currentDate.getTime()) / 1000,
+		),
 	};
 }

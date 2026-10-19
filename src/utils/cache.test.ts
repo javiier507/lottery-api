@@ -2,47 +2,47 @@ import { describe, expect, it } from "vitest";
 
 import { getMaxAge } from "./cache";
 
-describe("max age", () => {
-	it("when is earlier than 20:00 utc", () => {
-		const result = getMaxAge(new Date("2024-12-15T19:42:23.031Z"));
-		expect(result.expirationDate.getUTCHours()).toBe(20);
-		expect(result.expirationDate.getUTCMinutes()).toBe(30);
-		expect(result.seconds).toBe(2880); //  48 minutes
+// Daily cache schedule. Ranges include the start and exclude the end.
+// Panama (UTC-5) | UTC                    | Cache duration
+// 00:00–15:30    | 05:00–20:30            | Up to 1 hour; expires by 15:30 Panama
+// 15:30–18:00    | 20:30–23:00            | Up to 30 seconds; expires by 18:00 Panama
+// 18:00–24:00    | 23:00–05:00 (next day) | 1 hour
+// UTC methods keep this schedule independent of the server's time zone.
+describe("max age (Panama time)", () => {
+	it.each([
+		["2024-12-15T10:00:00-05:00", "2024-12-15T11:00:00-05:00", 3600],
+		["2024-12-15T14:30:00-05:00", "2024-12-15T15:30:00-05:00", 3600],
+		["2024-12-15T15:15:00-05:00", "2024-12-15T15:30:00-05:00", 900],
+		["2024-12-15T15:29:50-05:00", "2024-12-15T15:30:00-05:00", 10],
+		["2024-12-15T15:29:59.999-05:00", "2024-12-15T15:30:00-05:00", 0],
+		["2024-12-15T15:30:00-05:00", "2024-12-15T15:30:30-05:00", 30],
+		["2024-12-15T16:00:23.031-05:00", "2024-12-15T16:00:53.031-05:00", 30],
+		["2024-12-15T17:59:30-05:00", "2024-12-15T18:00:00-05:00", 30],
+		["2024-12-15T17:59:50-05:00", "2024-12-15T18:00:00-05:00", 10],
+		["2024-12-15T17:59:59.999-05:00", "2024-12-15T18:00:00-05:00", 0],
+		["2024-12-15T18:00:00-05:00", "2024-12-15T19:00:00-05:00", 3600],
+		["2024-12-15T18:30:00-05:00", "2024-12-15T19:30:00-05:00", 3600],
+		["2024-12-15T19:00:00-05:00", "2024-12-15T20:00:00-05:00", 3600],
+		["2024-12-15T23:45:00-05:00", "2024-12-16T00:45:00-05:00", 3600],
+		["2024-12-31T18:30:00-05:00", "2024-12-31T19:30:00-05:00", 3600],
+	])("at %s expires at %s with max-age=%i", (input, expiration, seconds) => {
+		const result = getMaxAge(new Date(input));
+
+		expect(result.expirationDate).toEqual(new Date(expiration));
+		expect(result.seconds).toBe(seconds);
 	});
 
-	it("when is between 20:00 utc and 20:30 utc", () => {
-		const result = getMaxAge(new Date("2024-12-15T20:20:23.031Z"));
-		expect(result.expirationDate.getUTCHours()).toBe(20);
-		expect(result.expirationDate.getUTCMinutes()).toBe(30);
-		expect(result.seconds).toBe(600); //  10 minutos
-	});
+	it("does not change the supplied date, including milliseconds", () => {
+		const currentDate = new Date("2024-12-15T15:29:50.123-05:00");
+		const originalTimestamp = currentDate.getTime();
 
-	it("when is between 20:30 utc and 21:00 utc", () => {
-		const result = getMaxAge(new Date("2024-12-15T20:32:23.031Z"));
-		expect(result.expirationDate.getUTCHours()).toBe(20);
-		expect(result.expirationDate.getUTCMinutes()).toBe(34);
-		expect(result.seconds).toBe(120); //  2 minutos
-	});
+		const result = getMaxAge(currentDate);
 
-	it("when is between 21:00 utc and 22:00 utc", () => {
-		const result = getMaxAge(new Date("2024-12-15T21:01:23.031Z"));
-		expect(result.expirationDate.getUTCHours()).toBe(21);
-		expect(result.expirationDate.getUTCMinutes()).toBe(3);
-		expect(result.seconds).toBe(120); //  2 minutos
-	});
-
-	it("when is between 21:30 utc and 22:00 utc", () => {
-		const result = getMaxAge(new Date("2024-12-15T21:31:23.031Z"));
-		expect(result.expirationDate.getUTCHours()).toBe(22);
-		expect(result.expirationDate.getUTCMinutes()).toBe(31);
-		expect(result.seconds).toBe(3600); //  1 hora
-	});
-
-	it("when is between 22:00 utc and forward", () => {
-		const result = getMaxAge(new Date("2024-12-15T22:02:23.031Z"));
-		expect(result.expirationDate.getUTCDate()).toBe(15);
-		expect(result.expirationDate.getUTCHours()).toBe(23);
-		expect(result.expirationDate.getUTCMinutes()).toBe(2);
-		expect(result.seconds).toBe(3600); //  1 hora
+		expect(currentDate.getTime()).toBe(originalTimestamp);
+		expect(result.currentDate.getTime()).toBe(originalTimestamp);
+		expect(result.expirationDate).toEqual(
+			new Date("2024-12-15T15:30:00-05:00"),
+		);
+		expect(result.seconds).toBe(9);
 	});
 });
